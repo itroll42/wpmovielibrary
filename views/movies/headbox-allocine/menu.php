@@ -1,13 +1,13 @@
 <?php
 /**
  * Movie Headbox Menu Template view
- * 
- * Showing a movie's headbox menu, Allociné style.
- * 
+ *
+ * Showing a movie's headbox menu, Allocin© style.
+ *
  * @since    2.1.4
- * 
+ *
  * @uses    $links
- */
+ */ /*
 ?>
 
 			<div class="wpmoly headbox allocine movie menu">
@@ -28,3 +28,4 @@ $active = '';
 endforeach; ?>
 				</ul>
 			</div>
+*/ ?>

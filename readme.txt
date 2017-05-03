@@ -1,5 +1,5 @@
 === WPMovieLibrary ===
-Contributors: caercam
+Contributors: caercam, itroll42
 Donate link: http://wpmovielibrary.com/contribute/#donate
 Tags: movie, movies, movie database, movie library, movie collection, cinema, movie genre, actor, actor, movie image, movie poster, movie meta, movie metadata, tmdb
 Requires at least: 4.2
@@ -9,6 +9,8 @@ License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 WordPress Movie Library is an advanced movie library managing plugin to turn your WordPress Blog into a Movie Library.
+
+Modified by itroll42 for customized coming soon listing
 
 == Description ==
 

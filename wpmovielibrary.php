@@ -16,15 +16,15 @@
  * @wordpress-plugin
  * Plugin Name: WPMovieLibrary
  * Plugin URI:  http://wpmovielibrary.com
- * Description: A WordPress Plugin to manage a personnal library of movies.
+ * Description: A WordPress Plugin to manage a personnal library of movies, modified by itroll42
  * Version:     2.1.4.4
- * Author:      Charlie MERLAND
+ * Author:      Charlie MERLAND, Isaac Troll
  * Author URI:  http://www.caercam.org/
  * Text Domain: wpmovielibrary
  * License:     GPL-3.0
  * License URI: http://www.gnu.org/licenses/gpl-3.0.txt
  * Domain Path: /languages
- * GitHub Plugin URI: https://github.com/wpmovielibrary/wpmovielibrary
+ * GitHub Plugin URI: https://github.com/itroll42/wpmovielibrary
  */
 
 // If this file is called directly, abort.

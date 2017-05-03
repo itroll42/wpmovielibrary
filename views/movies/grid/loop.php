@@ -7,46 +7,92 @@
 				</div>
 <?php endif; ?>
 
-				<div id="wpmoly-movie-grid" class="wpmoly movies grid grid-col-<?php echo $columns . $theme; ?><?php if ( $title || $year || $rating ) echo ' spaced'; ?>">
+<div id="movieList" class="wpmoly block headbox allocine contained theme-epik position-top">
 
-<?php
-global $post;
-if ( ! empty( $movies ) ) :
-	foreach ( $movies as $post ) :
-		setup_postdata( $post );
+    <?php
+    global $post;
+    if ( ! empty( $movies ) ) :
+    	foreach ( $movies as $post ) :
+    		setup_postdata( $post );
 
-		$size = 'medium';
-		if ( 1 == $columns )
-			$size = 'large';
+            $runtime = wpmoly_get_movie_meta( get_the_ID(), 'runtime' );
+            $homepage = wpmoly_get_movie_meta( get_the_ID(), 'homepage' );
+            $audio = wpmoly_get_movie_meta( get_the_ID(), 'audio' );
+            $cast = wpmoly_get_movie_meta( get_the_ID(), 'cast' );
+            $releaseDate = apply_filters( 'wpmoly_format_movie_release_date', wpmoly_get_movie_meta( get_the_ID(), 'local_release_date'), 'm/d/Y' );
 
-		$class = 'wpmoly movie';
-		if ( $title )
-			$class .= ' with-title';
-		if ( $year )
-			$class .= ' with-year';
-		if ( $rating )
-			$class .= ' with-rating';
-?>
-					<div id="wpmoly-movie-<?php the_ID(); ?>" <?php post_class( $class ) ?>>
-						<a class="wpmoly grid movie link" title="<?php the_title(); ?>" href="<?php the_permalink(); ?>">
-							<?php if ( has_post_thumbnail() ) the_post_thumbnail( $size, array( 'class' => 'wpmoly grid movie poster' ) ); ?>
-<?php 	if ( $title ) : ?>
-							<h4 class="wpmoly grid movie title"><?php the_title(); ?></h4>
-<?php 	endif; if ( $year ) : ?>
-							<span class="wpmoly grid movie year"><?php echo apply_filters( 'wpmoly_format_movie_release_date', wpmoly_get_movie_meta( get_the_ID(), 'release_date' ), 'Y' ); ?></span>
-<?php 	endif; if ( $rating ) : ?>
-							<span class="wpmoly grid movie rating"><?php echo apply_filters( 'wpmoly_movie_rating_stars', wpmoly_get_movie_rating( get_the_ID() ) ); ?></span>
-<?php 	endif; ?>
-						</a>
-					</div>
+            $todayDate = date("m/d/Y");
+            $dateTimestamp1 = strtotime($todayDate);
+            $dateTimestamp2 = strtotime($releaseDate);
+            if ($dateTimestamp1 < $dateTimestamp2) :
+    ?>
+    <div id="movie" class="wpmoly headbox allocine movie singleMovieRecord">
+        <div class="wpmoly headbox allocine movie content">
+            <div class="wpmoly headbox allocine movie content tab main">
+                <div class="wpmoly headbox allocine movie poster">
+                    <?php echo the_post_thumbnail( 'medium' ); ?>
+                </div>
+                <div class="wpmoly headbox allocine movie section main">
+                    <div style="display:none" id="releaseDate"> <?php
+                        echo $releaseDate;
+                        ?>
+                    </div>
+                    <div style="display:none" id="test">
+                        <?php echo $dateTimestamp1; ?><br>
+                        <?php echo $dateTimestamp2; ?><br>
+                        <?php echo $dateTimestamp1 < $dateTimestamp2; ?>
+                    </div>
+                    <div id="title">
+                        <h4 class="wpmoly grid movie title"><?php echo apply_filters( 'wpmoly_format_movie_title', wpmoly_get_movie_meta( get_the_ID(), 'title' )); ?><?php echo apply_filters( 'wpmoly_format_movie_format', wpmoly_get_movie_meta( get_the_ID(), 'format' )); ?></h4>
+                    </div>
+                    <div class="wpmoly headbox allocine movie meta release_date">
+                        <span class="wpmoly headbox allocine movie meta label"><?php _e( 'Release Date', 'wpmovielibrary' ); ?>&nbsp;</span>
+                        <strong><?php echo apply_filters( 'wpmoly_format_movie_release_date', wpmoly_get_movie_meta( get_the_ID(), 'local_release_date' ), 'M d, Y');
+                         ?></strong>
+            <?php if ( ! empty($runtime) && '&mdash;' != $runtime) : ?>
+                        <span class="wpmoly headbox allocine movie meta value">(Running Time: <?php echo $runtime; ?>)</span>
+            <?php endif; ?>
+                    </div>
+                    <div class="wpmoly headbox allocine movie meta rating">
+                        <span class="wpmoly headbox allocine movie meta label"><?php _e( 'Rated', 'wpmovielibrary' ); ?>&nbsp;</span>
+                        <span class="wpmoly headbox allocine movie meta value"><?php echo wpmoly_get_movie_meta( get_the_ID(), 'certification' ); ?></span>
+                    </div>
+            <?php /** if ( ! empty( $cast )) :  ?>
+                    <div class="wpmoly headbox allocine movie meta cast">
+                        <span class="wpmoly headbox allocine movie meta label"><?php _e( 'Starring', 'wpmovielibrary' ); ?>&nbsp;</span>
+                        <span class="wpmoly headbox allocine movie meta value"><?php echo $cast; ?></span>
+                    </div>
+            <?php endif; ?>**/ ?>
+                    <div class="wpmoly headbox allocine movie meta genres">
+                        <span class="wpmoly headbox allocine movie meta label"><?php _e( 'Genres', 'wpmovielibrary' ); ?>&nbsp;</span>
+                        <span class="wpmoly headbox allocine movie meta value"><?php echo wpmoly_get_movie_meta( get_the_ID(), 'genres' ); ?></span>
+                    </div>
+            <?php if ( ! empty( $audio )) :  ?>
+                    <div class="wpmoly headbox allocine movie meta audio">
+                        <span class="wpmoly headbox allocine movie meta label"><?php _e( 'Formats', 'wpmovielibrary' ); ?>&nbsp;</span>
+                        <span class="wpmoly headbox allocine movie meta value"><?php echo apply_filters( 'wpmoly_format_movie_audio', $audio); ?></span>
+                    </div>
+            <?php endif; ?>
+                    <div class="wpmoly headbox allocine movie meta homepage">
+                        <span class="wpmoly headbox allocine movie meta label"><?php _e( 'Homepage', 'wpmovielibrary' ); ?>&nbsp;</span>
+                        <span class="wpmoly headbox allocine movie meta value"><a target="_newwindow" href="<?php echo $homepage; ?>"><?php echo $homepage; ?></a></span>
+                    </div>
+                </div>
+                <div class="wpmoly headbox allocine movie section details">
+                    <h3 class="wpmoly headbox allocine movie meta sub-title"><?php _e( 'Synopsis and Details', 'wpmovielibrary' ); ?></h3>
+                    <p><?php echo wpmoly_get_movie_meta( get_the_ID(), 'overview'); ?></p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<?php
-	endforeach;
-	wp_reset_postdata();
-else :
-?>
-					<h5><?php _e( 'This is somewhat embarrassing, isn&rsquo;t it?', 'wpmovielibrary' ); ?></h5>
-					<p><?php _e( 'We could&rsquo;t find any movie matching your criteria.', 'wpmovielibrary' ); ?></p>
-<?php endif; ?>
-
-				</div>
+    <?php
+        endif;
+    	endforeach;
+    	wp_reset_postdata();
+    else :
+    ?>
+    					<h5><?php _e( 'This is somewhat embarrassing, isn&rsquo;t it?', 'wpmovielibrary' ); ?></h5>
+    					<p><?php _e( 'We could&rsquo;t find any movie matching your criteria.', 'wpmovielibrary' ); ?></p>
+    <?php endif; ?>
+</div>
