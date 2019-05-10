@@ -82,7 +82,7 @@ wpmoly = wpmoly || {};
 						movies: $( wpmoly_import_movies.list ).val(),
 					},
 					beforeSend: function() {
-						$( wpmoly_import_movies.button ).prev( '.spinner' ).css( { display: 'inline-block' } );
+						$( wpmoly_import_movies.button ).prev( '.spinner' ).addClass( 'spinning' );
 					},
 					error: function( response ) {
 						wpmoly_state.clear();
@@ -106,16 +106,37 @@ wpmoly = wpmoly || {};
 					},
 					success: function( response ) {
 
-						var message = ( response.data.length > 1 ? wpmoly_lang.imported_movies : wpmoly_lang.imported_movie );
-						$( wpmoly_import_movies.list ).val('');
-						wpmoly_state.clear();
-						wpmoly_state.set( message.replace( '%s', response.data.length ), 'updated' );
-						$( '#_wpmoly_imported' ).trigger( 'click' );
-						wpmoly_import_view.reload( {} );
+						if ( undefined != response.errors ) {
+							wpmoly_state.clear();
+							if ( undefined != response.errors ) {
+								$.each( response.errors, function() {
+									if ( $.isArray( this ) ) {
+										$.each( this, function() {
+											wpmoly_state.set( this, 'error' );
+										});
+									}
+									else {
+										wpmoly_state.set( this, 'error' );
+									}
+								});
+							}
+							else
+								wpmoly_state.set( wpmoly_lang.oops, 'error' );
+
+							$( wpmoly_import_movies.list ).val( '' );
+							wpmoly_import_view.reload({});
+						} else {
+							var message = ( response.data.length > 1 ? wpmoly_lang.imported_movies : wpmoly_lang.imported_movie );
+							$( wpmoly_import_movies.list ).val('');
+							wpmoly_state.clear();
+							wpmoly_state.set( message.replace( '%s', response.data.length ), 'updated' );
+							$( '#_wpmoly_imported' ).trigger( 'click' );
+							wpmoly_import_view.reload( {} );
+						}
 					},
 					complete: function( r ) {
 						wpmoly.update_nonce( 'import-movies-list', r.responseJSON.nonce );
-						$( wpmoly_import_movies.button ).prev( '.spinner' ).css( { display: 'none' } );
+						$( wpmoly_import_movies.button ).prev( '.spinner' ).removeClass( 'spinning' );
 					}
 				});
 			};

@@ -416,19 +416,19 @@ if ( ! class_exists( 'WPMOLY_Utils' ) ) :
 			if ( ! is_array( $data ) || empty( $data ) || ! isset( $data['crew'] ) )
 				return $data;
 
-			$filtered_crew = array(
-				'cast' => apply_filters( 'wpmoly_filter_cast_data', $data['cast'] )
-			);
+			$filtered_crew = array();
 
 			$supported_jobs = WPMOLY_Settings::get_supported_movie_meta( 'crew' );
-			foreach ( wp_list_pluck( $supported_jobs, 'job' ) as $job ) {
+			foreach ( wp_list_pluck( $supported_jobs, 'job' ) as $slug => $job ) {
 				$jobs = wp_filter_object_list( $data['crew'], array( 'job' => $job ) );
 				if ( ! empty( $jobs ) ) {
-					$filtered_crew[ $job ] = wp_list_pluck( $jobs, 'name' );
+					$filtered_crew[ $slug ] = array_values( wp_list_pluck( $jobs, 'name' ) );
 				} else {
-					$filtered_crew[ $job ] = '';
+					$filtered_crew[ $slug ] = '';
 				}
 			}
+
+			$filtered_crew['cast'] = apply_filters( 'wpmoly_filter_cast_data', $data['cast'] );
 
 			return $filtered_crew;
 		}
@@ -802,6 +802,7 @@ if ( ! class_exists( 'WPMOLY_Utils' ) ) :
 			if ( 10 != $base )
 				$base = 5;
 
+			$rating = floatval( $rating );
 			if ( 0 > $rating )
 				$rating = 0.0;
 			if ( 5.0 < $rating )
